@@ -3,13 +3,19 @@ import {connect} from "react-redux"
 import store from './store'
 class CommentBox extends React.Component{
     handleSubmit =(e)=>{
-        e.preventDefault()
-        let newComment = this.comment.value
-        store.dispatch({type:'ADD_COMMENT',comment:newComment})  //action 对象
+        e.preventDefault();
+        let newComment = this.comment.value;
+        console.log(newComment)
+        store.dispatch({type:'ADD_COMMENT',comment: newComment, postId: this.props.postId});  //action 对象
         this.myForm.reset()
     }
     render(){
-       let com = this.props.comments
+        let { postId, comments } = this.props;
+        console.log(this.props)
+        // console.log(comments[postId-1].content)
+        let com = comments.filter(value => value.postId ===  postId ).map(item => {
+            return item.content;
+        })
         return(
         <div className="comment-box">
             {
@@ -27,5 +33,5 @@ class CommentBox extends React.Component{
 }
 const mapStateToProps = (state) =>({
     comments:state.comments
-})
+});
 export default connect(mapStateToProps)(CommentBox)
